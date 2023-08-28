@@ -2,14 +2,19 @@
   "name": "libdatetime",
   "version": "1.0.0-rc.1",
   "description": "A Date/Time library for the Browser.",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsup src/index.ts --format cjs --dts --clean",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Socheat Sok (https://github.com/socheatsok78)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/socheatsok78/libdatetime-ts.git"
+  },
+  "license": "MIT",
   "devDependencies": {
     "tsup": "^7.2.0",
     "typescript": "^5.2.2"
