@@ -22,5 +22,8 @@
   "dependencies": {
     "mitt": "^3.0.1",
     "signaltimer": "^1.4.3"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
