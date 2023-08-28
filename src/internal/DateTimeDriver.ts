@@ -45,7 +45,7 @@ interface DateTimeDriverState {
 
 export class DateTimeDriver {
     private readonly interval: number = 1000
-    private state: DateTimeDriverState = createInitialState()
+    private state!: DateTimeDriverState
 
     constructor(
         private core: DateTimeInterface,
@@ -58,6 +58,10 @@ export class DateTimeDriver {
      * Activate the driver
      */
     activate() {
+        // Initialize the driver
+        this.initialize()
+
+        // Setup the clock cycle
         if (this.options.mode === "foreground") {
             this.runForeground()
         } else {
@@ -66,7 +70,19 @@ export class DateTimeDriver {
     }
 
     /**
+     * Initialize the driver
+     * 
+     * @internal
+     */
+    private initialize() {
+        const current = new Date()
+        this.state = { current, previous: current }
+    }
+
+    /**
      * Run the clock cycle in the foreground
+     * 
+     * @internal
      */
     private runForeground() {
         requestSignalAnimationInterval(() => {
@@ -76,6 +92,8 @@ export class DateTimeDriver {
 
     /**
      * Run the clock cycle in the background
+     * 
+     * @internal
      */
     private runBackground() {
         setSignalCounterInterval(() => {
@@ -85,6 +103,8 @@ export class DateTimeDriver {
 
     /**
      * Run the clock cycle handler
+     * 
+     * @internal
      */
     private runHandler() {
         // Dispatch beforeupdate event
@@ -102,6 +122,8 @@ export class DateTimeDriver {
 
     /**
      * Dispatch the date/time events
+     * 
+     * @internal
      */
     private dispatchDateTimeEvents(state: DateTimeDriverState) {
         const { current, previous } = state
@@ -130,9 +152,4 @@ export class DateTimeDriver {
             this.core.dispatchEvent("year", { current, previous })
         }
     }
-}
-
-function createInitialState(): DateTimeDriverState {
-    const current = new Date()
-    return { current: current, previous: current }
 }
