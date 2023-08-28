@@ -4,13 +4,14 @@
   "description": "A Date/Time library for the Browser.",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsup src/index.ts --format cjs --dts --clean",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "tsup": "^7.2.0",
     "typescript": "^5.2.2"
   },
   "dependencies": {
