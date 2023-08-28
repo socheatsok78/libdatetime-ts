@@ -1,0 +1,20 @@
+{
+  "name": "libdatetime",
+  "version": "1.0.0-rc.1",
+  "description": "A Date/Time library for the Browser.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "mitt": "^3.0.1",
+    "signaltimer": "^1.4.3"
+  }
+}

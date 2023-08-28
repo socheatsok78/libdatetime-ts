@@ -1,2 +1,16 @@
-# datetime-event
-A direct and simple solution for handling Date/Time event listeners
+# libdatetime
+A Date/Time library for the Browser.
+
+## Install
+```bash
+npm install libdatetime
+```
+
+## Usage
+```javascript
+import { DateTime } from 'libdatetime';
+
+const dt = new DateTime();
+
+dt.addEventListener("second", (event) => {console.log(event)})
+// { type: "second", detail: { current: Date, pervious: Date } }
