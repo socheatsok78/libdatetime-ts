@@ -97,37 +97,37 @@ export class DateTimeDriver {
         this.core.dispatchEvent("update", this.state)
 
         // Dispatch date/time events
-        this.dispatchDateTimeEvents()
+        this.dispatchDateTimeEvents(this.state)
     }
 
     /**
      * Dispatch the date/time events
      */
-    private dispatchDateTimeEvents() {
-        const { current, previous } = this.state
+    private dispatchDateTimeEvents(state: DateTimeDriverState) {
+        const { current, previous } = state
 
         if (current.getSeconds() !== previous.getSeconds()) {
-            this.core.dispatchEvent("second", this.state)
+            this.core.dispatchEvent("second", { current, previous })
         }
 
         if (current.getMinutes() !== previous.getMinutes()) {
-            this.core.dispatchEvent("minute", this.state)
+            this.core.dispatchEvent("minute", { current, previous })
         }
 
         if (current.getHours() !== previous.getHours()) {
-            this.core.dispatchEvent("hour", this.state)
+            this.core.dispatchEvent("hour", { current, previous })
         }
 
         if (current.getDate() !== previous.getDate()) {
-            this.core.dispatchEvent("day", this.state)
+            this.core.dispatchEvent("day", { current, previous })
         }
 
         if (current.getMonth() !== previous.getMonth()) {
-            this.core.dispatchEvent("month", this.state)
+            this.core.dispatchEvent("month", { current, previous })
         }
 
         if (current.getFullYear() !== previous.getFullYear()) {
-            this.core.dispatchEvent("year", this.state)
+            this.core.dispatchEvent("year", { current, previous })
         }
     }
 }
