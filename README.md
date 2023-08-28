@@ -14,3 +14,8 @@ const dt = new DateTime();
 
 dt.addEventListener("second", (event) => {console.log(event)})
 // { type: "second", detail: { current: Date, pervious: Date } }
+```
+
+## License
+
+Licensed under the [MIT](LICENSE) License.
