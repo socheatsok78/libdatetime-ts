@@ -4,6 +4,8 @@ import type { DateTimeDriverClockCycle, DateTimeInterface } from './types'
 export interface DateTimeDriverOptions {
     /**
      * The clock cycle function
+     * 
+     * @default DefaultClockCycle
      */
     clockcycle?: DateTimeDriverClockCycle
 
