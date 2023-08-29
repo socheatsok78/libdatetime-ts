@@ -7,8 +7,9 @@
  * @returns 
  */
 export function foreground(callback: Function, signal?: AbortSignal, ms?: number, ...args: any[]) {
-    return setTimeout(() => requestAnimationFrame(() => {
+    function task() {
         if (signal?.aborted) return
         callback(Date.now(), ...args)
-    }), ms)
+    }
+    return requestAnimationFrame(() => setTimeout(() => task(), ms))
 }
