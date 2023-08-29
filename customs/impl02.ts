@@ -36,6 +36,7 @@ export function impl02(callback: Function, signal?: AbortSignal, ms: number = 10
         if (delta > ms) {
             // something really bad happened. Maybe the browser (tab) was inactive?
             // possibly special handling to avoid futile "catch up" run
+            delay = 0
         }
 
         // Choose the one you prefer"

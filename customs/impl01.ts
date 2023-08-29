@@ -21,11 +21,10 @@ export function impl01(callback: Function, signal?: AbortSignal, ms: number = 10
             delay = delay - ms
         }
 
-        console.log("delay=", delay)
-
         if (delta > ms) {
             // something really bad happened. Maybe the browser (tab) was inactive?
             // possibly special handling to avoid futile "catch up" run
+            delay = 0
         }
 
         expected = now + delay
