@@ -14,19 +14,19 @@ const DefaultRequestClockCycleCallbackOptions: RequestClockCycleCallbackOptions 
  */
 export function impl02(callback: Function, signal?: AbortSignal, ms: number = 1000, options = DefaultRequestClockCycleCallbackOptions) {
     const initialDate = Date.now()
-    let expected = initialDate + ms
+    const initialUpcoming = initialDate + ms
 
-    function task(now: number) {
+    function task(now: number, upcoming: number) {
         callback(now)
-        queue(now)
+        queue(now, upcoming)
     }
 
-    function queue(now: number) {
-        const delta = Math.abs(now - expected)
+    function queue(now: number, upcoming: number) {
+        const delta = Math.abs(now - upcoming)
         const driff = Math.max(0, ms - delta)
         let delay = Math.floor(driff)
 
-        console.log({ delta, driff, delay }, { now, expected })
+        console.log({ delta, driff, delay }, { now, upcoming })
 
         // Keep the delay within the bounds of the clock cycle
         if (delay > (ms * options.multiplier)) {
@@ -42,10 +42,9 @@ export function impl02(callback: Function, signal?: AbortSignal, ms: number = 10
         // Choose the one you prefer"
         // expected = now + ms
         // expected = now + delay
-        expected = now + ms
-        foreground(task, signal, delay)
+        upcoming = now + ms
+        foreground(task, signal, delay, upcoming)
     }
 
-    callback(initialDate)
-    foreground(task, signal, ms)
+    foreground(task, signal, ms, initialUpcoming)
 }

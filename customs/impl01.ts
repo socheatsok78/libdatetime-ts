@@ -5,16 +5,16 @@ import { foreground } from "./foreground"
  */
 export function impl01(callback: Function, signal?: AbortSignal, ms: number = 1000) {
     const initialDate = Date.now()
-    let expected = initialDate + ms
+    const initialUpcoming = initialDate + ms
 
-    function queue(now: number) {
+    function queue(now: number, upcoming: number) {
         callback(now)
 
-        const delta = now - expected
+        const delta = now - upcoming
         const driff = Math.max(0, ms - delta)
         let delay = Math.floor(driff)
 
-        console.log({ delta, driff, delay }, { now, expected })
+        console.log({ delta, driff, delay }, { now, upcoming })
 
         // Keep the delay within the bounds of the clock cycle
         if (delay > ms) {
@@ -27,9 +27,9 @@ export function impl01(callback: Function, signal?: AbortSignal, ms: number = 10
             delay = 0
         }
 
-        expected = now + delay
-        foreground(queue, signal, delay)
+        upcoming = now + delay
+        foreground(queue, signal, delay, upcoming)
     }
 
-    foreground(queue, signal, ms)
+    foreground(queue, signal, ms, initialUpcoming)
 }

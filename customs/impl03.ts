@@ -5,19 +5,17 @@ import { foreground } from "./foreground"
  */
 export function impl03(callback: Function, signal?: AbortSignal, ms: number = 1000) {
     const initialDate = Date.now()
-    let expected = initialDate + ms
+    const initialUpcoming = initialDate + ms
 
-    function task(now: number, delay: number) {
-        queue(now)
-        callback(now + delay)
+    function task(now: number, upcoming: number) {
+        callback(now)
+        queue(now, upcoming)
     }
 
-    function queue(now: number) {
-        const delta = now - expected
+    function queue(now: number, upcoming: number) {
+        const delta = now - initialUpcoming
         const driff = Math.max(0, ms - delta)
         let delay = Math.floor(driff)
-
-        console.log({ delta, driff, delay }, { now, expected })
 
         if (delta > ms) {
             // something really bad happened. Maybe the browser (tab) was inactive?
@@ -29,10 +27,9 @@ export function impl03(callback: Function, signal?: AbortSignal, ms: number = 10
             delay = 0
         }
 
-        expected = now + delay
-        foreground(task, signal, delay, delay)
+        upcoming = now + ms
+        foreground(task, signal, delay, upcoming)
     }
 
-    foreground(task, signal, ms, ms)
-    callback(initialDate)
+    foreground(task, signal, ms, initialUpcoming)
 }
