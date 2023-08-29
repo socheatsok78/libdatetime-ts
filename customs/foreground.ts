@@ -6,9 +6,9 @@
  * @param ms 
  * @returns 
  */
-export function foreground(callback: Function, signal?: AbortSignal, ms?: number) {
+export function foreground(callback: Function, signal?: AbortSignal, ms?: number, ...args: any[]) {
     return setTimeout(() => requestAnimationFrame(() => {
         if (signal?.aborted) return
-        callback(Date.now())
+        callback(Date.now(), ...args)
     }), ms)
 }
