@@ -20,7 +20,6 @@ export interface DateTimeEvent {
 
 export type DateTimeEventMap = Record<DateTimeEventType, DateTimeEvent>
 
-
 export interface DateTimeInterface {
     controller: AbortController
 
@@ -46,3 +45,6 @@ export interface DateTimeInterface {
      */
     dispatchEvent(event: DateTimeEventType, detail: DateTimeEventDetail): void
 }
+
+export type DateTimeDriverClockCycleHandler = (time: number) => void
+export type DateTimeDriverClockCycle = (handler: DateTimeDriverClockCycleHandler, signal?: AbortSignal | undefined, ms?: number | undefined) => any

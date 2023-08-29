@@ -1,41 +1,18 @@
-import { requestSignalAnimationInterval, setSignalCounterInterval} from 'signaltimer'
-import type { DateTimeInterface } from './types'
-
-/**
- * The mode to run the clock cycle in
- *
- * - `"foreground"`: The clock cycle will run in the foreground, and will
- *  be paused when the tab is not visible. Using `rAf+setTimeout` loop combination.
- * - `"background"`: The clock cycle will run in the background, and will
- * continue to run when the tab is not visible. Using `setTimeout` loop.
- * 
- * **Timeouts in inactive tabs**  
- * To reduce the load (and associated battery usage) from background tabs, browsers will enforce a minimum timeout delay in inactive tabs.
- */
-type ClockCycleMode = 
-    | "foreground"
-    | "background"
+import { DefaultClockCycle } from './DefaultClockCycle'
+import type { DateTimeDriverClockCycle, DateTimeInterface } from './types'
 
 export interface DateTimeDriverOptions {
     /**
-     * The mode to run the clock cycle in
-     *
-     * - `"foreground"`: The clock cycle will run in the foreground, and will
-     *  be paused when the tab is not visible. Using `rAf+setTimeout` loop combination.
-     * - `"background"`: The clock cycle will run in the background, and will
-     * continue to run when the tab is not visible. Using `setTimeout` loop.
-     * 
-     * **Timeouts in inactive tabs**  
-     * To reduce the load (and associated battery usage) from background tabs, browsers will enforce a minimum timeout delay in inactive tabs.
-     * 
-     * **MDN References**  
-     * [Timeouts in inactive tabs](https://developer.mozilla.org/en-US/docs/Web/API/setTimeout#timeouts_in_inactive_tabs)
-     * | [Throttling of tracking scripts](https://developer.mozilla.org/en-US/docs/Web/API/setTimeout#throttling_of_tracking_scripts)
-     * | [Late timeouts](https://developer.mozilla.org/en-US/docs/Web/API/setTimeout#late_timeouts)
-     *  
-     * @default "background"
+     * The clock cycle function
      */
-    mode?: ClockCycleMode
+    clockcycle?: DateTimeDriverClockCycle
+
+    /**
+     * The interval in milliseconds to run the clock cycle
+     * 
+     * @default 1000
+     */
+    interval?: number
 }
 
 interface DateTimeDriverState {
@@ -43,15 +20,19 @@ interface DateTimeDriverState {
     previous: Date
 }
 
+
 export class DateTimeDriver {
-    private readonly interval: number = 1000
     private state!: DateTimeDriverState
+
+    private interval: number
+    private clockcycle: DateTimeDriverClockCycle
 
     constructor(
         private core: DateTimeInterface,
-        private options: DateTimeDriverOptions = {}
+        options: DateTimeDriverOptions = {}
     ) {
-        options.mode = options.mode ?? "background"
+        this.interval = options.interval ?? 1000
+        this.clockcycle = options.clockcycle ?? DefaultClockCycle
     }
 
     /**
@@ -61,12 +42,8 @@ export class DateTimeDriver {
         // Initialize the driver
         this.initialize()
 
-        // Setup the clock cycle
-        if (this.options.mode === "foreground") {
-            this.runForeground()
-        } else {
-            this.runBackground()
-        }
+        // Run the driver's clock cycle
+        this.run()
     }
 
     /**
@@ -80,25 +57,10 @@ export class DateTimeDriver {
     }
 
     /**
-     * Run the clock cycle in the foreground
-     * 
      * @internal
      */
-    private runForeground() {
-        requestSignalAnimationInterval(() => {
-            this.runHandler()
-        }, this.core.controller.signal, this.interval)
-    }
-
-    /**
-     * Run the clock cycle in the background
-     * 
-     * @internal
-     */
-    private runBackground() {
-        setSignalCounterInterval(() => {
-            this.runHandler()
-        }, this.core.controller.signal, this.interval)
+    private run() {
+        this.clockcycle(() => this.runHandler(), this.core.controller.signal, this.interval)
     }
 
     /**
