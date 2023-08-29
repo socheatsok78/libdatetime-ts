@@ -13,6 +13,6 @@ import { requestSignalAnimationInterval } from "signaltimer";
  * @param ms 
  * @returns 
  */
-export function DefaultClockCycle(handler: (time: number) => void, signal?: AbortSignal, ms?: number) {
-    return requestSignalAnimationInterval(handler, signal, ms)
+export function DefaultClockCycle(handler: (...args: any[]) => void, signal?: AbortSignal, ms?: number, ...args: any[]) {
+    return requestSignalAnimationInterval(() => handler(Date.now(), ...args), signal, ms)
 }

@@ -46,5 +46,5 @@ export interface DateTimeInterface {
     dispatchEvent(event: DateTimeEventType, detail: DateTimeEventDetail): void
 }
 
-export type DateTimeDriverClockCycleHandler = (time: number) => void
+export type DateTimeDriverClockCycleHandler = (...args: any[]) => void
 export type DateTimeDriverClockCycle = (handler: DateTimeDriverClockCycleHandler, signal?: AbortSignal | undefined, ms?: number | undefined) => any
