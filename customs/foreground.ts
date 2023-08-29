@@ -6,7 +6,7 @@
  * @param ms 
  * @returns 
  */
-export function enqueue(callback: Function, signal?: AbortSignal, ms?: number) {
+export function foreground(callback: Function, signal?: AbortSignal, ms?: number) {
     return setTimeout(() => requestAnimationFrame(() => {
         if (signal?.aborted) return
         callback(Date.now())

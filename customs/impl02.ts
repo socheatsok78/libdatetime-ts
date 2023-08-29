@@ -1,4 +1,4 @@
-import { enqueue } from "./enqueue"
+import { foreground } from "./foreground"
 
 interface RequestClockCycleCallbackOptions {
     multiplier: number
@@ -39,9 +39,9 @@ export function impl02(callback: Function, signal?: AbortSignal, ms: number = 10
         }
 
         expected = now + ms
-        enqueue(task, signal, delay)
+        foreground(task, signal, delay)
     }
 
     callback(initialDate)
-    enqueue(task, signal, ms)
+    foreground(task, signal, ms)
 }

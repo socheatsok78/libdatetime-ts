@@ -1,4 +1,4 @@
-import { enqueue } from "./enqueue"
+import { foreground } from "./foreground"
 
 /**
  * Sync with system clock (almost)
@@ -29,8 +29,8 @@ export function impl01(callback: Function, signal?: AbortSignal, ms: number = 10
         }
 
         expected = now + delay
-        enqueue(queue, signal, delay)
+        foreground(queue, signal, delay)
     }
 
-    enqueue(queue, signal, ms)
+    foreground(queue, signal, ms)
 }
