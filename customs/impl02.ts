@@ -38,6 +38,9 @@ export function impl02(callback: Function, signal?: AbortSignal, ms: number = 10
             // possibly special handling to avoid futile "catch up" run
         }
 
+        // Choose the one you prefer"
+        // expected = now + ms
+        // expected = now + delay
         expected = now + ms
         foreground(task, signal, delay)
     }
