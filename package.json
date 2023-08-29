@@ -1,6 +1,6 @@
 {
   "name": "libdatetime",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "description": "A Date/Time library for the Browser.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
