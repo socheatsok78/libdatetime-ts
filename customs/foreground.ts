@@ -11,5 +11,5 @@ export function foreground(callback: Function, signal?: AbortSignal, ms?: number
         if (signal?.aborted) return
         callback(Date.now(), ...args)
     }
-    return requestAnimationFrame(() => setTimeout(() => task(), ms))
+    return setTimeout(() => requestAnimationFrame(() => task()), ms)
 }

@@ -2,11 +2,13 @@ import { foreground } from "./foreground"
 
 interface RequestClockCycleCallbackOptions {
     multiplier: number
+    trigger: "early" | "late"
     debug: boolean
 }
 
 const DefaultRequestClockCycleCallbackOptions: RequestClockCycleCallbackOptions = {
     multiplier: 1.05,
+    trigger: "early",
     debug: false
 }
 
@@ -20,14 +22,15 @@ export function impl04(callback: Function, signal?: AbortSignal, ms: number = 10
     const initialUpcoming = initialDate + ms
 
     function task(now: number, upcoming: number) {
-        callback(upcoming)
+        if (_options.trigger === "late") {
+            callback(upcoming)
+        }
         queue(now, upcoming)
     }
 
     function queue(now: number, upcoming: number) {
         const delta1 = Date.now() - now
         const delta2 = now - upcoming
-        // const delta = Math.max(0, delta1 - delta2, delta2 - delta1)
         const delta = delta1 + delta2
         const driff = ms - delta
         let delay = Math.max(0, driff)
@@ -45,10 +48,15 @@ export function impl04(callback: Function, signal?: AbortSignal, ms: number = 10
                     `Attempting to catch up by reducing the delay to ${ms}.`
                 ])
             }
-            delay = ms
+            delay = 0
         }
 
         upcoming = now + ms
+
+        if (_options.trigger === "early") {
+            callback(upcoming)
+        }
+
         foreground(task, signal, delay, upcoming)
 
         // Print debug information
@@ -57,5 +65,5 @@ export function impl04(callback: Function, signal?: AbortSignal, ms: number = 10
         }
     }
 
-    foreground(task, signal, ms, initialUpcoming)
+    foreground(queue, signal, ms, initialUpcoming)
 }
